@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, url_for, request,session
+from flask import Flask, redirect, render_template, url_for, request,session,jsonify
 import psycopg2 as pg
 from markupsafe import escape
 import sys
@@ -209,20 +209,27 @@ def updateTable (new_table,table_id,indx):
 
     pass
 
-@app.route('/timetable/<string:username>/<string:table_id>',methods=['GET','POST','PUT']) 
+@app.route('/timetable/<string:username>/<string:table_id>',methods=['GET','POST']) 
 def timetable (username,table_id):
     if not 'id' in session:
         return redirect(url_for('login'));
     
+
+
     table_id = createTable(session['id'],0,1);
 
     table = loadTable (table_id);
     print(table);
     updateTable(table,'ds',1);
     print(username,table_id);
-    return 'HI'
+    res = app.response_class(
+        response= jsonify(table),
+        status=200,
+        mimetype='application/json',
+    )
     
-    
+    return render_template('/timetable/weekly.html',value=res);
+
 
 
 # always run when build (for debugging) 

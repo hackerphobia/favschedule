@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/myCSS/weekly.css') }}">
+    <title>Document</title>
+    <script src="{{ url_for('static',filename='js/weekly.js') }}"></script>
+</head>
+<body>
+    
+    <div class="topnav">
+        <a href="#home">Home</a>
+        <a class="active"href="#news">Time Table</a>
+        <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+        <a id="add" onclick="myFunction()" >+</a>
+    </div>
+    
+    <div id="center">
+        <form method="POST" action="/timetable">
+            <label for="day">Thứ:</label><br>
+            <select name="day" id="day">
+                <option value="0">Monday</option>
+                <option value="1">Tuesday</option>
+                <option value="2">Wednesday</option>
+                <option value="3">Thursday</option>
+                <option value="4">Friday</option>
+                <option value="5">Saturday</option>
+                <option value="6">Sunday</option>
+            </select><br>
+            <label for="time_start">Bắt đầu:</label><br>
+            <input type="text" id="time_start" name="time_start"><br>
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name"><br>
+            <label for="time_end">Kết thúc:</label><br>
+            <input type="text" id="time_end" name="time_end"><br>
+            <label for="description">Công việc:</label><br>
+            <input type="text" id="description" name="description"><br><br>
+            <input type="submit" value="Xác nhận" id="submit" >
+        </form>
+    </div>
+  
+    <script>
+        function myFunction() {
+        var x = document.getElementById('center');
+        if (x.style.visibility === 'hidden') {
+            x.style.visibility = 'visible';
+        } else {
+            x.style.visibility = 'hidden';
+        }
+        }
+</script>
+    
+    <script src="D:\lemin\Code\Python\favschedule\static\js\weekly.js"></script>
+</body>
+</html>

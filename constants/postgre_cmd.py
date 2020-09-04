@@ -19,8 +19,8 @@ weekly_table_cmd = {
         Sa varchar
     );
     ''',
-    'load_table': '''SELECT * FROM {} WHERE type = 'time' or type = 'data' or type = 'name' '''
-
+    'load_table': '''SELECT * FROM {} WHERE type = 'time' or type = 'data' or type = 'name' ''',
+    'weekday': [0,'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
 }
 
 daily_table_cmd = {
