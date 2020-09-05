@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, url_for, request,session,jsonify
+from flask import Flask, redirect, render_template, url_for, request,session,jsonify,json
 import psycopg2 as pg
 from markupsafe import escape
 import sys
@@ -45,7 +45,9 @@ def login():
         conn = dtbs.createConnection();
         try:
             cur = conn.cursor();
-            cur.execute(cmd._login['check_login'],(username,pwd,))
+            cur.execute('''
+        SELECT * FROM USERS WHERE username = %s AND pwd = %s
+    ''',(username,pwd,))
             user_data = cur.fetchone()
 
             print(user_data);
@@ -63,7 +65,7 @@ def login():
         session['id'] = user_data[0];
 
         dtbs.closeConnection();
-        return redirect('http://127.0.0.1:5000/timetable/{}/{}'.format(user_data[3],user_data[1])); 
+        return redirect('http://127.0.0.1:5000/timetable'); 
     else:
         return render_template('login.html')
 
@@ -209,28 +211,63 @@ def updateTable (new_table,table_id,indx):
 
     pass
 
-@app.route('/timetable/<string:username>/<string:table_id>',methods=['GET','POST']) 
-def timetable (username,table_id):
+@app.route('/timetable',methods=['GET','POST']) 
+def timetable ():
     if not 'id' in session:
         return redirect(url_for('login'));
     
+    return render_template('/timetable/weekly.html');
 
+@app.route('/getUserID')
+def getUserID ():
+    if not 'id' in session:
+        return redirect(url_for('login'));
+    user_data = None
+    conn = dtbs.createConnection();
+    try:
+        cur = conn.cursor();
+        cur.execute('''SELECT * FROM users WHERE id = %s''',(session['id'],))
+        user_data = cur.fetchone()
 
-    table_id = createTable(session['id'],0,1);
+        print(user_data);
+        cur.close();
+    except (Exception, pg.Error) as error :
+        print(error);
+        # error when get user data 
 
+    if (user_data == None):
+        print('Not have acc')
+        return redirect(url_for('login'));
+        # redirect to signup
+    dtbs.closeConnection();
+    return jsonify(user_data);
+
+@app.route('/getTable/<string:table_id>')
+def getTable (table_id):
     table = loadTable (table_id);
-    print(table);
-    updateTable(table,'ds',1);
-    print(username,table_id);
     res = app.response_class(
-        response= jsonify(table),
+        response= json.dumps(table),
         status=200,
         mimetype='application/json',
     )
+    return res;
+
+@app.route('/updateTable',methods = ['POST'])
+def updateTable ():
+    res = app.response_class(
+        # response= json.dumps(table),
+        status=200,
+        mimetype='application/json',
+    )
+    if request.method != 'POST':
+        return res(response='INVALID REQUEST')
     
-    return render_template('/timetable/weekly.html',value=res);
+    data = request.form['data'];
 
-
+@app.route('/script/<string:script_name>')
+def script(script_name):
+    if script_name == 'weekly.js':
+        return render_template('/timetable/weekly.js')
 
 # always run when build (for debugging) 
 with app.test_request_context():
