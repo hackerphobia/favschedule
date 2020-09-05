@@ -40,7 +40,7 @@ fetch ('http://127.0.0.1:5000/getUserID')
             description: des,
         }
         $("button").click(function(){
-            $("#bitch").append(`<div>${cur_data[d][i].name}</div>`);
+            $("#newdiv").append(`<div>${cur_data[d][i].name}</div>`);
           });
     });
         
