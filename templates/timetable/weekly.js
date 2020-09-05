@@ -2,7 +2,7 @@
 fetch ('http://127.0.0.1:5000/getUserID')
 .then((res)=> res.json())
 .then((data) => {
-    console.log(data)
+    // console.log(data)
     weeklyTableID = data[1];
     const link = `http://127.0.0.1:5000/getTable/${weeklyTableID}`;
 
@@ -11,14 +11,43 @@ fetch ('http://127.0.0.1:5000/getUserID')
 .then((res) => res.json())
 .then(data => {
     console.log(data)
+
+    var cur_data = data;
+
     for (i in data) {
-        if (i == 1) {
-            $("p").append("<b>Appended text</b>");
+        if (i == 0) {
+            
+            $("p").append(`<b>${data[i][1].time}</b>`);
         }
     }
+    document.getElementById('submit').addEventListener('click',()=>{
+        var d = document.getElementById("day").value;
+        var start = document.getElementById("time_start").value;
+        var end = document.getElementById("time_end").value;
+        var name = document.getElementById("name").value;
+        var des = document.getElementById("description").value;
+        
+        console.log(d,start,end,name,des);
+
+        var i = 0;
+        while (cur_data[d][i] != undefined) {
+            i++;
+        }
+        console.log(i);
+        cur_data[d][i] = {
+            time:start+ '-' + end,
+            name: name,
+            description: des,
+        }
+    });
+        
+    document.getElementById('save').addEventListener('click',()=>{
+        
+    });
         
 
 });
+
 
 console.log('HIi');
 var data=[{

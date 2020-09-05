@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/myCSS/weekly.css') }}">
     <title>Document</title>
-    <script src="script/weekly.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="script/weekly.js"></script>
 </head>
 <body>
     
@@ -19,7 +19,7 @@
     </div>
     
     <div id="center">
-        <form method="POST" action="/timetable">
+        <div>
             <label for="day">Thứ:</label><br>
             <select name="day" id="day">
                 <option value="0">Monday</option>
@@ -38,10 +38,12 @@
             <input type="text" id="time_end" name="time_end"><br>
             <label for="description">Công việc:</label><br>
             <input type="text" id="description" name="description"><br><br>
-            <input type="submit" value="Xác nhận" id="submit" >
-        </form>
+            <button id="submit">Xacs Nhan</button>
+        </div>
     </div>
-  
+    <div>
+        <button id="save">Save</button>
+    </div>
     <script>
         function myFunction() {
         var x = document.getElementById('center');
