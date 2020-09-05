@@ -42,7 +42,15 @@ fetch ('http://127.0.0.1:5000/getUserID')
     });
         
     document.getElementById('save').addEventListener('click',()=>{
+        fetch(`http://127.0.0.1:5000/update_table`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+              },
+            body:JSON.stringify(cur_data),
         
+        })
     });
         
 

@@ -252,17 +252,19 @@ def getTable (table_id):
     )
     return res;
 
-@app.route('/updateTable',methods = ['POST'])
-def updateTable ():
-    res = app.response_class(
-        # response= json.dumps(table),
-        status=200,
-        mimetype='application/json',
-    )
-    if request.method != 'POST':
-        return res(response='INVALID REQUEST')
-    
-    data = request.form['data'];
+@app.route('/update_table',methods = ['POST'])
+def update_table ():
+    # res = app.response_class(
+    #     # response= json.dumps(table),
+    #     status=200,
+    #     mimetype='application/json',
+    # )
+    # if request.method != 'POST':
+    #     return res(response='INVALID REQUEST')
+    print(request.get_json());
+    # data = request.form['data'];
+    # print(data);
+    return 'HI';
 
 @app.route('/script/<string:script_name>')
 def script(script_name):
