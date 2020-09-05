@@ -39,6 +39,9 @@ fetch ('http://127.0.0.1:5000/getUserID')
             name: name,
             description: des,
         }
+        $("button").click(function(){
+            $("#bitch").append(`<div>${cur_data[d][i].name}</div>`);
+          });
     });
         
     document.getElementById('save').addEventListener('click',()=>{
