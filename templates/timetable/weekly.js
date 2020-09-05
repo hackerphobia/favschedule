@@ -13,13 +13,15 @@ fetch ('http://127.0.0.1:5000/getUserID')
     console.log(data)
 
     var cur_data = data;
+    for(i in cur_data){
+        for (j in cur_data[i]){
+            $(`#${i}`).append(`<div>${cur_data[i][j].time}</div>`);
+            $(`#${i}`).append(`<div>${cur_data[i][j].name}</div>`);
 
-    for (i in data) {
-        if (i == 0) {
-            
-            $("p").append(`<b>${data[i][1].time}</b>`);
         }
+        
     }
+    
     document.getElementById('submit').addEventListener('click',()=>{
         var d = document.getElementById("day").value;
         var start = document.getElementById("time_start").value;
@@ -39,9 +41,13 @@ fetch ('http://127.0.0.1:5000/getUserID')
             name: name,
             description: des,
         }
-        $("button").click(function(){
-            $("#bitch").append(`<div>${cur_data[d][i].name}</div>`);
-          });
+
+        $(`#${d}`).append(`
+        <div> 
+            <div>${cur_data[d][i].name}</div>
+            <button>REMOVE</button>
+        </div>`
+        );
     });
         
     document.getElementById('save').addEventListener('click',()=>{
