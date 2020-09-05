@@ -11,7 +11,12 @@ fetch ('http://127.0.0.1:5000/getUserID')
 .then((res) => res.json())
 .then(data => {
     console.log(data)
-    
+    for (i in data) {
+        if (i == 1) {
+            $("p").append("<b>Appended text</b>");
+        }
+    }
+        
 
 });
 
