@@ -13,7 +13,9 @@ fetch ('http://127.0.0.1:5000/getUserID')
 .then((res) => res.json())
 .then(data => {
     console.log(data)
-
+    $(`.navbar-nav nav-flex-icons`).append(`<li class="nav-item">
+      ${userInfo}
+  </li>`)
     var cur_data = data;
     var sum_data = 0
     for(i in cur_data){
@@ -58,13 +60,16 @@ fetch ('http://127.0.0.1:5000/getUserID')
             name: name,
             description: des,
         }
+        $(`#${d}`).append(` 
+            <div id= "a${i}" >
+            <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" class="defaultUnchecked">
+            <label class="custom-control-label" for="defaultUnchecked">${cur_data[d][i].name}</label>
+            </div>
+            <small class="text-muted">${cur_data[d][i].time}</small>
+            <hr>
+          </div>`);
 
-        $(`#${d}`).append(`
-        <div> 
-            <div>${cur_data[d][i].name}</div>
-            <button>REMOVE</button>
-        </div>`
-        );
 
     });
     
