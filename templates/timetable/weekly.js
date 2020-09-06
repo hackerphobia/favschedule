@@ -13,7 +13,7 @@ fetch ('http://127.0.0.1:5000/getUserID')
 .then((res) => res.json())
 .then(data => {
     console.log(data)
-
+    // $(".(navbar-nav nav-flex-icons)")
     var cur_data = data;
     var sum_data = 0
     for(i in cur_data){
