@@ -199,29 +199,33 @@ def updateTable (new_table,table_id,indx):
         cur = conn.cursor();
         for i in raw_data:
             print(i);
-            cmd = '''
-                UPDATE {}  
-                SET type = '{}',
-                    act_index = {},
-                    Sun = '{}',
-                    Mon = '{}',
-                    Tu = '{}',
-                    We = '{}',
-                    Th = '{}',
-                    Fr = '{}',
-                    Sa = '{}'
-                WHERE type = '{}' AND
-                      act_index = {}
-            '''
-            cur.execute(cmd.format(table_id,i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7],i[8],i[0],i[1]));
-
-
+            cur.execute('''SELECT * FROM {} WHERE type = '{}' AND act_index = {}'''.format(table_id,i[0],i[1]))
+            if cur.fetchone() == None:
+                cmd = '''
+                    INSERT INTO {}(type,act_index,Sun,Mon,Tu,We,Th,Fr,Sa) values('{}',{},'{}','{}','{}','{}','{}','{}','{}')
+                '''
+                cur.execute(cmd.format(table_id,i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7],i[8]));
+            else:
+                cmd = '''
+                    UPDATE {}  
+                    SET type = '{}',
+                        act_index = {},
+                        Sun = '{}',
+                        Mon = '{}',
+                        Tu = '{}',
+                        We = '{}',
+                        Th = '{}',
+                        Fr = '{}',
+                        Sa = '{}'
+                    WHERE type = '{}' AND act_index = {}
+                '''
+                cur.execute(cmd.format(table_id,i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7],i[8],i[0],i[1]));
         conn.commit();
         cur.close();
     except (Exception, pg.Error) as error :
         print(error);
 
-    pass
+    dtbs.closeConnection();
 
 @app.route('/timetable',methods=['GET','POST']) 
 def timetable ():
