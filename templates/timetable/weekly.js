@@ -15,9 +15,15 @@ fetch ('http://127.0.0.1:5000/getUserID')
     var cur_data = data;
     for(i in cur_data){
         for (j in cur_data[i]){
-            $(`#${i}`).append(`<div>${cur_data[i][j].time}</div>`);
-            $(`#${i}`).append(`<div>${cur_data[i][j].name}</div>`);
-
+            $(`#${i}`).append(` 
+            <div id= "${j}" >
+            <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+            <label class="custom-control-label" for="defaultUnchecked">${cur_data[i][j].name}</label>
+            </div>
+            <small class="text-muted">${cur_data[i][j].time}</small>
+            <hr>
+          </div>`);
         }
         
     }
@@ -85,6 +91,7 @@ var data=[{
         description:"baobeo"
     }
 }]
+
 // for (i=0; i<=data.length; i++){
 
 //     for (key in data[i]){
