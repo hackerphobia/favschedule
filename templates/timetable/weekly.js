@@ -1,99 +1,106 @@
+var userInfo = undefined
 
-// fetch ('http://127.0.0.1:5000/getUserID')
-// .then((res)=> res.json())
-// .then((data) => {
-//     // console.log(data)
-//     weeklyTableID = data[1];
-//     const link = `http://127.0.0.1:5000/getTable/${weeklyTableID}`;
+fetch ('http://127.0.0.1:5000/getUserID')
+.then((res)=> res.json())
+.then((user) => {
+    console.log(user)
+    userInfo = user
+    weeklyTableID = user[1];
+    const link = `http://127.0.0.1:5000/getTable/${weeklyTableID}`;
 
-//     return fetch(link)
-// })
-// .then((res) => res.json())
-// .then(data => {
-//     console.log(data)
+    return fetch(link)
+})
+.then((res) => res.json())
+.then(data => {
+    console.log(data)
 
-//     var cur_data = data;
-//     var sum_data = 0
-//     for(i in cur_data){
-//         for (j in cur_data[i]){
-//             $(`#${i}`).append(` 
-//             <div id= "a${j}" >
-//             <div class="custom-control custom-checkbox">
-//             <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-//             <label class="custom-control-label" for="defaultUnchecked">${cur_data[i][j].name}</label>
-//             </div>
-//             <small class="text-muted">${cur_data[i][j].time}</small>
-//             <hr>
-//           </div>`);
-//           sum_data = sum_data + len(cur_data[i][j])+1
-//         }    
+    var cur_data = data;
+    var sum_data = 0
+    for(i in cur_data){
+        console.log(cur_data[i])
+        for (j in cur_data[i]){
+            $(`#${i}`).append(` 
+            <div id= "a${j}" >
+            <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" class="defaultUnchecked">
+            <label class="custom-control-label" for="defaultUnchecked">${cur_data[i][j].name}</label>
+            </div>
+            <small class="text-muted">${cur_data[i][j].time}</small>
+            <hr>
+          </div>`);
+          sum_data = sum_data + cur_data[i][j].length +1
+        }    
 
-//         //Append the Summary data
-//         $(".card-title pricing-card-title mb-4").append(`
-//             ${len(cur_data[i])+1}
-//             <small class="text-muted">${sum_data}</small>
-//         `)
-//     }
+        //Append the Summary data
+        $(".card-title pricing-card-title mb-4").append(`
+            ${cur_data[i].length+1}
+            <small class="text-muted">${sum_data}</small>
+        `)
+    }
     
-//     //SUBMIT NEW DATA
-//     document.getElementById('submit').addEventListener('click',()=>{
-//         var d = document.getElementById("day").value;
-//         var start = document.getElementById("time_start").value;
-//         var end = document.getElementById("time_end").value;
-//         var name = document.getElementById("name").value;
-//         var des = document.getElementById("description").value;
+    //SUBMIT NEW DATA
+    document.getElementById('submit').addEventListener('click',()=>{
+        var d = document.getElementById("day").value;
+        var start = document.getElementById("time_start").value;
+        var end = document.getElementById("time_end").value;
+        var name = document.getElementById("name").value;
+        var des = document.getElementById("description").value;
         
-//         console.log(d,start,end,name,des);
+        console.log(d,start,end,name,des);
 
-//         var i = 0;
-//         while (cur_data[d][i] != undefined) {
-//             i++;
-//         }
-//         console.log(i);
-//         cur_data[d][i] = {
-//             time:start+ '-' + end,
-//             name: name,
-//             description: des,
-//         }
+        var i = 0;
+        while (cur_data[d][i] != undefined) {
+            i++;
+        }
+        console.log(i);
+        cur_data[d][i] = {
+            time:start+ '-' + end,
+            name: name,
+            description: des,
+        }
 
-//         $(`#${d}`).append(`
-//         <div> 
-//             <div>${cur_data[d][i].name}</div>
-//             <button>REMOVE</button>
-//         </div>`
-//         );
+        $(`#${d}`).append(`
+        <div> 
+            <div>${cur_data[d][i].name}</div>
+            <button>REMOVE</button>
+        </div>`
+        );
 
-//     });
+    });
     
     //POST NEW DATA
-    document.getElementsByClassName('save').addEventListener('click',()=>{
-        // fetch(`http://127.0.0.1:5000/update_table`,{
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //         // 'Content-Type': 'application/x-www-form-urlencoded',
-        //       },
-        //     body:JSON.stringify(cur_data),
+    document.getElementById("save").addEventListener('click',(e)=>{
+        res = {
+            userInfo: userInfo,
+            data: cur_data
+        }
+        fetch(`http://127.0.0.1:5000/update_table`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+              },
+            body:JSON.stringify(res),
         
-        // })
+        })
         
-        // //CHANGE SUM DATA
-        // // document.getElementById("card-title pricing-card-title mb-4").innerHTML = "";
+        //CHANGE SUM DATA
+        document.getElementById("card-title pricing-card-title mb-4").innerHTML = "";
         
-        // for(i in cur_data){
-        //     $(".card-title pricing-card-title mb-4").append(`
-        //     ${len(cur_data[i])+1}
-        //     <small class="text-muted">${sum_data}</small>
-        // `)
+        for(i in cur_data){
+            $(".card-title pricing-card-title mb-4").append(`
+            ${cur_data[i].length+1}
+            <small class="text-muted">${sum_data}</small>
+        `)
         
         $('#0').find('#a0').remove()
 
-        //}
+        }
 
     });
         
 
-// });
+});
 
 
 console.log('HIi');

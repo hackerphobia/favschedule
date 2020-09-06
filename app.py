@@ -100,7 +100,7 @@ def convert_to_daily_table (raw_data):
 
 def convert_to_raw_data (table,table_type):
     if (table_type == 0):
-        raw_data = [[None,None,None,None,None,None,None,None,None]];
+        raw_data = [];
 
         for tm in range(7):
             for k,v in table[tm].items():
@@ -116,7 +116,6 @@ def convert_to_raw_data (table,table_type):
                         raw_data.append([k1,k,None,None,None,None,None,None,None]);
                         raw_data[-1][tm+2] = v1;
                         
-        raw_data.pop(0);
         return raw_data
     elif table_type == 1:
         order = cmd.daily_table_cmd['index'];
@@ -193,15 +192,28 @@ def createTable (user_id,table_type,indx,table_id=None):
 
 # weekly only
 def updateTable (new_table,table_id,indx):
-    raw_data = convert_to_raw_data(new_table,'weekly');
-
+    raw_data = convert_to_raw_data(new_table,0);
+    print(raw_data);
     conn = dtbs.createConnection();
     try:
         cur = conn.cursor();
-        
-        cur.execute('''
-            UPDATE 
-        ''')
+        for i in raw_data:
+            print(i);
+            cmd = '''
+                UPDATE {}  
+                SET type = '{}',
+                    act_index = {},
+                    Sun = '{}',
+                    Mon = '{}',
+                    Tu = '{}',
+                    We = '{}',
+                    Th = '{}',
+                    Fr = '{}',
+                    Sa = '{}'
+                WHERE type = '{}' AND
+                      act_index = {}
+            '''
+            cur.execute(cmd.format(table_id,i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7],i[8],i[0],i[1]));
 
 
         conn.commit();
@@ -254,14 +266,16 @@ def getTable (table_id):
 
 @app.route('/update_table',methods = ['POST'])
 def update_table ():
-    # res = app.response_class(
-    #     # response= json.dumps(table),
-    #     status=200,
-    #     mimetype='application/json',
-    # )
-    # if request.method != 'POST':
-    #     return res(response='INVALID REQUEST')
-    print(request.get_json());
+
+
+    # print(request.get_json());
+    userInfo = request.get_json()['userInfo'];
+    table = request.get_json()['data'];
+    print(userInfo[1]);
+
+    updateTable(table,userInfo[1],1);
+
+
     # data = request.form['data'];
     # print(data);
     return 'HI';
